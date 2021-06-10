@@ -25,88 +25,177 @@ git clone git@github.com:RobertBerger/meta-phytec.git
 
 cd meta-phytec
 
-https://github.com/phytec/meta-phytec.git
-
 git remote add official-upstream git://github.com/phytec/meta-phytec
 
 $ git fetch official-upstream
 
 warning: no common commits
-remote: Enumerating objects: 2137, done.
-remote: Counting objects: 100% (486/486), done.
-remote: Compressing objects: 100% (328/328), done.
-remote: Total 2137 (delta 210), reused 357 (delta 149), pack-reused 1651
-Receiving objects: 100% (2137/2137), 4.03 MiB | 5.42 MiB/s, done.
-Resolving deltas: 100% (1005/1005), done.
-From git://github.com/STMicroelectronics/meta-st-stm32mp
- * [new branch]      dunfell    -> official-upstream/dunfell
- * [new branch]      gatesgarth -> official-upstream/gatesgarth
- * [new branch]      hardknott  -> official-upstream/hardknott
- * [new branch]      master     -> official-upstream/master
- * [new branch]      thud       -> official-upstream/thud
- * [new branch]      warrior    -> official-upstream/warrior
- * [new branch]      zeus       -> official-upstream/zeus
- * [new tag]         openstlinux-20-02-19                  -> openstlinux-20-02-19
- * [new tag]         openstlinux-4.19-thud-mp1-19-02-20    -> openstlinux-4.19-thud-mp1-19-02-20
- * [new tag]         openstlinux-4.19-thud-mp1-19-04-05    -> openstlinux-4.19-thud-mp1-19-04-05
- * [new tag]         openstlinux-4.19-thud-mp1-19-10-09    -> openstlinux-4.19-thud-mp1-19-10-09
- * [new tag]         openstlinux-5.10-dunfell-mp1-21-03-31 -> openstlinux-5.10-dunfell-mp1-21-03-31
- * [new tag]         openstlinux-5.4-dunfell-mp1-20-06-24  -> openstlinux-5.4-dunfell-mp1-20-06-24
- * [new tag]         openstlinux-5.4-dunfell-mp1-20-11-12  -> openstlinux-5.4-dunfell-mp1-20-11-12
+remote: Enumerating objects: 19497, done.
+remote: Counting objects: 100% (19497/19497), done.
+remote: Compressing objects: 100% (4931/4931), done.
+remote: Total 19497 (delta 14128), reused 18843 (delta 13474), pack-reused 0
+Receiving objects: 100% (19497/19497), 2.86 MiB | 6.63 MiB/s, done.
+Resolving deltas: 100% (14128/14128), done.
+From git://github.com/phytec/meta-phytec
+ * [new branch]        1.8.1-phy2-fix  -> official-upstream/1.8.1-phy2-fix
+ * [new branch]        1.8.1-phy6-fix  -> official-upstream/1.8.1-phy6-fix
+ * [new branch]        dizzy           -> official-upstream/dizzy
+ * [new branch]        dunfell         -> official-upstream/dunfell
+ * [new branch]        fido            -> official-upstream/fido
+ * [new branch]        gatesgarth      -> official-upstream/gatesgarth
+ * [new branch]        hardknott       -> official-upstream/hardknott
+ * [new branch]        jethro          -> official-upstream/jethro
+ * [new branch]        krogoth         -> official-upstream/krogoth
+ * [new branch]        master          -> official-upstream/master
+ * [new branch]        morty           -> official-upstream/morty
+ * [new branch]        pyro            -> official-upstream/pyro
+ * [new branch]        rocko           -> official-upstream/rocko
+ * [new branch]        sumo            -> official-upstream/sumo
+ * [new branch]        thud            -> official-upstream/thud
+ * [new branch]        warrior         -> official-upstream/warrior
+ * [new branch]        zeus            -> official-upstream/zeus
+ * [new tag]           1.7.3-phy1      -> 1.7.3-phy1
+ * [new tag]           1.8.1-phy2-fix1 -> 1.8.1-phy2-fix1
+ * [new tag]           1.8.1-phy6-fix1 -> 1.8.1-phy6-fix1
+ * [new tag]           1.7.0-phy1      -> 1.7.0-phy1
+ * [new tag]           1.7.0-phy2      -> 1.7.0-phy2
+ * [new tag]           1.7.0-phy3      -> 1.7.0-phy3
+ * [new tag]           1.7.2-phy1      -> 1.7.2-phy1
+ * [new tag]           1.7.2-phy2      -> 1.7.2-phy2
+ * [new tag]           1.8.1-phy1      -> 1.8.1-phy1
+ * [new tag]           1.8.1-phy2      -> 1.8.1-phy2
+ * [new tag]           1.8.1-phy3      -> 1.8.1-phy3
+ * [new tag]           1.8.1-phy4      -> 1.8.1-phy4
+ * [new tag]           1.8.1-phy5      -> 1.8.1-phy5
+ * [new tag]           1.8.1-phy6      -> 1.8.1-phy6
+ * [new tag]           1.8.1-phy7      -> 1.8.1-phy7
+ * [new tag]           1.8.1-phy8      -> 1.8.1-phy8
+ * [new tag]           2.0.1-phy1      -> 2.0.1-phy1
+ * [new tag]           2.0.1-phy2      -> 2.0.1-phy2
+ * [new tag]           2.0.1-phy3      -> 2.0.1-phy3
+ * [new tag]           2.1.1-phy1      -> 2.1.1-phy1
+ * [new tag]           2.1.1-phy2      -> 2.1.1-phy2
+ * [new tag]           2.1.2-phy1      -> 2.1.2-phy1
+...
 
 $ git branch -a
 
 * master
+  remotes/official-upstream/1.8.1-phy2-fix
+  remotes/official-upstream/1.8.1-phy6-fix
+  remotes/official-upstream/dizzy
   remotes/official-upstream/dunfell
+  remotes/official-upstream/fido
   remotes/official-upstream/gatesgarth
   remotes/official-upstream/hardknott
+  remotes/official-upstream/jethro
+  remotes/official-upstream/krogoth
   remotes/official-upstream/master
+  remotes/official-upstream/morty
+  remotes/official-upstream/pyro
+  remotes/official-upstream/rocko
+  remotes/official-upstream/sumo
   remotes/official-upstream/thud
   remotes/official-upstream/warrior
   remotes/official-upstream/zeus
   remotes/origin/HEAD -> origin/master
   remotes/origin/master
 
-$git tag -l
+$ git tag -l
 
-openstlinux-20-02-19
-openstlinux-4.19-thud-mp1-19-02-20
-openstlinux-4.19-thud-mp1-19-04-05
-openstlinux-4.19-thud-mp1-19-10-09
-openstlinux-5.10-dunfell-mp1-21-03-31
-openstlinux-5.4-dunfell-mp1-20-06-24
-openstlinux-5.4-dunfell-mp1-20-11-12
+1.7.0-phy1
+1.7.0-phy2
+1.7.0-phy3
+1.7.2-phy1
+1.7.2-phy2
+1.7.3-phy1
+1.8.1-phy1
+1.8.1-phy2
+1.8.1-phy2-fix1
+1.8.1-phy3
+1.8.1-phy4
+1.8.1-phy5
+1.8.1-phy6
+1.8.1-phy6-fix1
+1.8.1-phy7
+1.8.1-phy8
+2.0.1-phy1
+2.0.1-phy2
+2.0.1-phy3
+2.1.1-phy1
+2.1.1-phy2
+2.1.2-phy1
+2.1.2-phy2
+2.1.2-phy3
+2.1.2-phy4
+2.1.2-phy5
+2.1.3-phy1
+2.1.3-phy2
+2.1.3-phy3
+2.1.3-phy4
+2.1.3-phy5
+2.1.3-phy6
+2.1.3-phy7
+2.1.3-phy8
+2.2.1-phy1
+2.2.1-phy2
+2.2.1-phy3
+2.2.1-phy4
+2.2.1-phy5
+2.2.1-phy6
+2.2.1-phy7
+2.2.1-phy8
+2.2.1-phy9
+2.2.2-phy1
+2.2.2-phy2
+2.2.2-phy3
 
-Phytec uses this commit 955b1d9a5f706013d718687b1afa6e3022c68fac for the pd21.1.0 release
+Phytec uses this commit 3ba7567532bcda55d9d73deff80a350877b68d07 for the pd21.1.0-stm release
 
-$ git show 955b1d9a5f706013d718687b1afa6e3022c68fac
-commit 955b1d9a5f706013d718687b1afa6e3022c68fac (tag: openstlinux-5.4-dunfell-mp1-20-11-12)
-Author: Christophe Priouzeau <christophe.priouzeau@st.com>
-Date:   Tue Oct 27 12:19:21 2020 +0100
+$ git show 3ba7567532bcda55d9d73deff80a350877b68d07
+commit 3ba7567532bcda55d9d73deff80a350877b68d07
+Author: Christian Hemp <c.hemp@phytec.de>
+Date:   Fri Feb 19 16:51:04 2021 +0100
 
-    M4PROJECTS: Update to v1.3.0
+    fix phygate tauri machine name
+    
+    Update kernel and u-boot recipe to new phygate-tauri machine name.
+    
+    Signed-off-by: Christian Hemp <c.hemp@phytec.de>
+    Signed-off-by: Stefan Müller-Klieser <s.mueller-klieser@phytec.de>
 
-    Change-Id: Iebd0edc92d4d8917cf1c5098a45304a43ee699c1
-
-diff --git a/recipes-extended/m4projects/m4projects-stm32mp1.bb b/recipes-extended/m4projects/m4projects-stm32mp1.bb
-index d71f3b7..fa5fff0 100644
---- a/recipes-extended/m4projects/m4projects-stm32mp1.bb
-+++ b/recipes-extended/m4projects/m4projects-stm32mp1.bb
-@@ -7,9 +7,9 @@ LICENSE = " \
- LIC_FILES_CHKSUM = "file://License.md;md5=5272d12bc1c2e29908b787134d73dae9"
-
- SRC_URI = "git://github.com/STMicroelectronics/STM32CubeMP1.git;protocol=https;branch=master"
--SRCREV  = "c604fa0965c73e430eebd5fa780180beb9a71b44"
-+SRCREV  = "39fe4ecb2871a844720f6e039f7fa91be9294bdf"
-
--PV = "1.2.0"
-+PV = "1.3.0"
-
- S = "${WORKDIR}/git"
+diff --git a/dynamic-layers/freescale-layer/recipes-kernel/linux/linux-imx_5.4.70_2.3.0-phy3.bb b/dynamic-layers/freescale-layer/recipes-kernel/linux/linux-imx_5.4.70_2.3.0-phy3.bb
+index ea1fdbea..439f2a74 100644
+--- a/dynamic-layers/freescale-layer/recipes-kernel/linux/linux-imx_5.4.70_2.3.0-phy3.bb
++++ b/dynamic-layers/freescale-layer/recipes-kernel/linux/linux-imx_5.4.70_2.3.0-phy3.bb
+@@ -25,6 +25,6 @@ COMPATIBLE_MACHINE .= "|phyboard-polis-imx8mm-3"
+ COMPATIBLE_MACHINE .= "|phyboard-polis-imx8mm-4"
+ COMPATIBLE_MACHINE .= "|phyboard-polis-imx8mn-1"
+ COMPATIBLE_MACHINE .= "|phyboard-pollux-imx8mp-1"
+-COMPATIBLE_MACHINE .= "|phygate-tauri-imx8mm-1"
+-COMPATIBLE_MACHINE .= "|phygate-tauri-imx8mm-2"
++COMPATIBLE_MACHINE .= "|phygate-tauri-l-imx8mm-1"
++COMPATIBLE_MACHINE .= "|phygate-tauri-l-imx8mm-2"
+ COMPATIBLE_MACHINE .= ")$"
+diff --git a/recipes-bsp/u-boot/u-boot-imx_2020.04_2.3.0-phy2.bb b/recipes-bsp/u-boot/u-boot-imx_2020.04_2.3.0-phy2.bb
+index aae54cc5..0e33781e 100644
+--- a/recipes-bsp/u-boot/u-boot-imx_2020.04_2.3.0-phy2.bb
++++ b/recipes-bsp/u-boot/u-boot-imx_2020.04_2.3.0-phy2.bb
+@@ -51,8 +51,8 @@ COMPATIBLE_MACHINE .= "|phyboard-polis-imx8mm-3"
+ COMPATIBLE_MACHINE .= "|phyboard-polis-imx8mm-4"
+ COMPATIBLE_MACHINE .= "|phyboard-polis-imx8mn-1"
+ COMPATIBLE_MACHINE .= "|phyboard-pollux-imx8mp-1"
+-COMPATIBLE_MACHINE .= "|phygate-tauri-imx8mm-1"
+-COMPATIBLE_MACHINE .= "|phygate-tauri-imx8mm-2"
++COMPATIBLE_MACHINE .= "|phygate-tauri-l-imx8mm-1"
++COMPATIBLE_MACHINE .= "|phygate-tauri-l-imx8mm-2"
+ COMPATIBLE_MACHINE .= ")$"
+ 
+ UBOOT_NAME_mx8 = "u-boot-${MACHINE}.bin-${UBOOT_CONFIG}"
 
 5) use specific tag/commit and make own branch
 
-git co 955b1d9a5f706013d718687b1afa6e3022c68fac
+git co 3ba7567532bcda55d9d73deff80a350877b68d07
 
 $ git co 955b1d9a5f706013d718687b1afa6e3022c68fac
 Note: checking out '955b1d9a5f706013d718687b1afa6e3022c68fac'.
