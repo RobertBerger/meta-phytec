@@ -195,10 +195,8 @@ index aae54cc5..0e33781e 100644
 
 5) use specific tag/commit and make own branch
 
-git co 3ba7567532bcda55d9d73deff80a350877b68d07
-
-$ git co 955b1d9a5f706013d718687b1afa6e3022c68fac
-Note: checking out '955b1d9a5f706013d718687b1afa6e3022c68fac'.
+$ git co 3ba7567532bcda55d9d73deff80a350877b68d07
+Note: checking out '3ba7567532bcda55d9d73deff80a350877b68d07'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
 changes and commit them, and you can discard any commits you make in this
@@ -209,25 +207,23 @@ do so (now or later) by using -b with the checkout command again. Example:
 
   git checkout -b <new-branch-name>
 
-HEAD is now at 955b1d9 M4PROJECTS: Update to v1.3.0
+HEAD is now at 3ba75675 fix phygate tauri machine name
 
-make branch out of it
-
-$ git checkout -b 2021-06-08-955b1d9a5f706013d718687b1afa6e3022c68fac-pd21.1.0-dunfell
-Switched to a new branch '2021-06-08-955b1d9a5f706013d718687b1afa6e3022c68fac-pd21.1.0-dunfell'
+$ git checkout -b 2021-06-09-3ba7567532bcda55d9d73deff80a350877b68d07-pd21.1.0-stm-dunfell
+Switched to a new branch '2021-06-09-3ba7567532bcda55d9d73deff80a350877b68d07-pd21.1.0-stm-dunfell'
 
 $ git branch
-* 2021-06-08-955b1d9a5f706013d718687b1afa6e3022c68fac-pd21.1.0-dunfell
+* 2021-06-09-3ba7567532bcda55d9d73deff80a350877b68d07-pd21.1.0-stm-dunfell
   master
 
 our hacked version of this branch (subset and modifications)
 
-$ git branch 2021-06-09-pd21.1.0-subset-dunfell-as-hardknott
-$ git co 2021-06-09-pd21.1.0-subset-dunfell-as-hardknott
-Switched to branch '2021-06-09-pd21.1.0-subset-dunfell-as-hardknott'
+$ git branch 2021-06-09-pd21.1.0-stm-dunfell-as-hardknott
+$ git co 2021-06-09-pd21.1.0-stm-dunfell-as-hardknott
+Switched to branch '2021-06-09-pd21.1.0-stm-dunfell-as-hardknott'
 $ git branch
-  2021-06-08-955b1d9a5f706013d718687b1afa6e3022c68fac-pd21.1.0-dunfell
-* 2021-06-09-pd21.1.0-subset-dunfell-as-hardknott
+  2021-06-09-3ba7567532bcda55d9d73deff80a350877b68d07-pd21.1.0-stm-dunfell
+* 2021-06-09-pd21.1.0-stm-dunfell-as-hardknott
   master
 
 #5) use specific upstream branch/commit and make own branch
@@ -270,47 +266,10 @@ $ git branch
 
 6.3) What was changed?
 
-$ git diff 2021-06-08-955b1d9a5f706013d718687b1afa6e3022c68fac-pd21.1.0-dunfell --stat
- conf/layer.conf                                                                                       |   2 +-
- recipes-connectivity/bluetooth/bluetooth-suspend.bb                                                   |  28 ------------
- recipes-connectivity/bluetooth/bluetooth-suspend/bluetooth-brcmfmac-sleep.service                     |  13 ------
- recipes-connectivity/bluetooth/bluetooth-suspend/bluetooth_brcmfmac_driver.sh                         |  44 -------------------
- recipes-connectivity/wifi/wifi-suspend.bb                                                             |  28 ------------
- recipes-connectivity/wifi/wifi-suspend/wifi-brcmfmac-sleep.service                                    |  13 ------
- recipes-connectivity/wifi/wifi-suspend/wifi_brcmfmac_driver.sh                                        |  54 -----------------------
- recipes-core/base-files/base-files/fstab                                                              |  11 -----
- recipes-core/base-files/base-files_%.bbappend                                                         |   1 -
- recipes-core/busybox/busybox/0001-miscutils-watchdog-Add-gettimeleft.patch                            |  38 ----------------
- recipes-core/busybox/busybox/busybox-stm32mp.cfg                                                      |  13 ------
- recipes-core/busybox/busybox/ifplugd.action                                                           |  20 ---------
- recipes-core/busybox/busybox/ifplugd.conf                                                             |   2 -
- recipes-core/busybox/busybox/ifplugd.sh                                                               |   5 ---
- recipes-core/busybox/busybox_%.bbappend                                                               |  33 --------------
- recipes-core/dropbear/dropbear_%.bbappend                                                             |   2 -
- recipes-core/meta/target-sdk-provides-dummy.bbappend                                                  |   1 -
- recipes-core/systemd/systemd-conf_%.bbappend                                                          |   9 ----
- recipes-devtools/sdcard-raw-tools/sdcard-raw-tools.bb                                                 |   2 +-
- recipes-graphics/drm/libdrm/0001-tests-modetest-automatic-configuration.patch                         | 125 ----------------------------------------------------
- recipes-graphics/drm/libdrm/0002-tests-util-smtpe-increase-alpha-to-middle-band.patch                 |  48 --------------------
- recipes-graphics/drm/libdrm/0003-tests-modetest-set-property-in-atomic-mode.patch                     |  43 ------------------
- recipes-graphics/drm/libdrm/0004-tests-modetest-close-crtc.patch                                      |  42 ------------------
- recipes-graphics/drm/libdrm_2.4.101.bbappend                                                          |  11 -----
- recipes-graphics/gcnano-userland/gcnano-userland-binary.inc                                           | 193 --------------------------------------------------------------------------------
- recipes-graphics/gcnano-userland/gcnano-userland-multi-binary-debug-stm32mp.bb                        |  17 -------
- recipes-graphics/gcnano-userland/gcnano-userland-multi-binary-stm32mp.bb                              |  15 -------
- recipes-graphics/mesa/mesa-gl_%.bbappend                                                              |   3 --
- recipes-graphics/mesa/mesa_%.bbappend                                                                 |  12 -----
- recipes-graphics/wayland/weston-init.bbappend                                                         |   2 -
- recipes-graphics/wayland/weston-init/weston.ini                                                       | 102 ------------------------------------------
- recipes-graphics/wayland/weston/xwayland.weston-start                                                 |   7 ---
- recipes-graphics/wayland/weston_%.bbappend                                                            |   1 -
- recipes-multimedia/pulseaudio/pulseaudio/default.pa                                                   | 137 ---------------------------------------------------------
- recipes-multimedia/pulseaudio/pulseaudio/system.pa                                                    |  76 --------------------------------
- recipes-multimedia/pulseaudio/pulseaudio_%.bbappend                                                   |  23 ----------
- recipes-st/images/st-image-userfs.bb                                                                  |   8 +++-
- recipes-support/hidapi/hidapi-stm32mp/0001-configure.ac-remove-duplicate-AC_CONFIG_MACRO_DIR-22.patch |  27 ++++++++++++
- recipes-support/hidapi/hidapi-stm32mp_0.8.0-rc1.bb                                                    |   4 +-
- 39 files changed, 39 insertions(+), 1176 deletions(-)
+$ git diff 2021-06-09-3ba7567532bcda55d9d73deff80a350877b68d07-pd21.1.0-stm-dunfell --stat
+ conf/layer.conf                                                           | 2 +-
+ recipes-bsp/u-boot/{u-boot_2020.01.bbappend => u-boot_2020.01.bbbbappend} | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
 7) push upstream:
 git co master
