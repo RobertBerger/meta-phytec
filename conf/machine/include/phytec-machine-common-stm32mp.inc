@@ -66,8 +66,10 @@ MACHINE_EXTRA_RRECOMMENDS_append = " ${@bb.utils.contains("MACHINE_FEATURES", "h
 # Specify WIFI and Bluetooth firmwares to install
 # Two firmware packages for the bcm43430 are available, current stm release has
 # been tested with the firmware package available upstream
-WIFI_LIST += "linux-firmware-bcm43430"
-BLUETOOTH_LIST += "linux-firmware-bluetooth-bcm4343"
+# --> rber removed for now
+# WIFI_LIST += "linux-firmware-bcm43430"
+# BLUETOOTH_LIST += "linux-firmware-bluetooth-bcm4343"
+# <-- rber removed for now
 
 # =========================================================================
 # Image
