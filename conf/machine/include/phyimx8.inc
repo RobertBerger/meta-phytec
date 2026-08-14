@@ -51,9 +51,12 @@ EMMC_DEV:mx8mp-generic-bsp ?= "2"
 IMAGE_CLASSES += "image-types-partup"
 require partup-layout-config.inc
 
+# kernel
+KERNEL_ALT_IMAGETYPE =+ " vmlinux "
+
 # Default images to build
 IMAGE_FSTYPES = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'rauc', '', 'tar.gz wic.xz wic.bmap', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'rauc', '', 'tar.bz2 wic.xz wic.bmap', d)} \
     partup \
 "
 
