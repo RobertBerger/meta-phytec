@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: MIT
+define KMACHINE phyboard-pollux-imx8mp-3
+define KTYPE standard
+define KARCH arm64
+
+include ktypes/standard/standard.scc
+#branch phyboard-pollux-imx8mp-3
+
+#include phyboard-pollux-imx8mp-3.scc
+
+#kconf hardware phyboard-pollux-imx8mp-3.cfg
+
+# Standard profiles pulled in from upstream kmeta
+#include cfg/usb-mass-storage.scc
+# the crash utility (https://github.com/crash-utility/crash) needs this:
+include cfg/no-debug-info-reduced.scc
+
+# default policy for standard kernels
+include features/latencytop/latencytop.scc
+include features/profiling/profiling.scc
+
+# this is needed for a 7.2.x kernel?
+#include cfg/nfs-boot.scc
+#include features/net/stmicro/stmmac.scc
+# The kconf hardware directive tells the Yocto kernel shell tools to apply your .cfg file at the final processing tier of this feature list, overriding anything inherited from standard.scc
+# kconf hardware features/net/stmicro/stmmac.cfg
+# include cfg/usb-mxs-phy-y.scc
+# include features/nfs-boot-enable/nfs-boot-enable.scc

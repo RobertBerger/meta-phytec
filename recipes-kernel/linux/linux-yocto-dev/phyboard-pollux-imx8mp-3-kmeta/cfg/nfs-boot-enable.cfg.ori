@@ -1,0 +1,29 @@
+# SOC Architecture and Vendor enabling
+CONFIG_ARCH_MXC=y
+CONFIG_NET_VENDOR_STMICRO=y
+
+# Synopsys DesignWare core and NXP i.MX8 Glue layer
+CONFIG_STMMAC_ETH=y
+CONFIG_STMMAC_PLATFORM=y
+CONFIG_DWMAC_IMX8=y
+
+# Link Management and PHY Layer
+CONFIG_PCS_XPCS=y
+CONFIG_PHYLINK=y
+
+
+# Core network infrastructure (Required to be built-in for an NFS root)
+CONFIG_NET=y
+CONFIG_INET=y
+CONFIG_IP_PNP=y
+CONFIG_IP_PNP_DHCP=y
+
+# Driver foundation dependencies (Must be =y so FEC can be =y)
+CONFIG_NETDEVICES=y
+CONFIG_ETHERNET=y
+CONFIG_NET_VENDOR_FREESCALE=y
+CONFIG_MII=y
+CONFIG_PHYLIB=y
+
+# Ethernet Core and standard NXP FEC port
+CONFIG_FEC=y
