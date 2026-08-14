@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: MIT
+define KMACHINE phyboard-pollux-imx8mp-3
+define KTYPE virt
+define KARCH arm64
+
+include ktypes/standard/standard.scc
+#branch phyboard-pollux-imx8mp-3
+
+#include phyboard-pollux-imx8mp-3.scc
+
+#kconf hardware phyboard-pollux-imx8mp-3.cfg
+
+# Standard profiles pulled in from upstream kmeta
+#include cfg/usb-mass-storage.scc
+# the crash utility (https://github.com/crash-utility/crash) needs this:
+include cfg/no-debug-info-reduced.scc
+
+# default policy for standard kernels
+include features/latencytop/latencytop.scc
+include features/profiling/profiling.scc
+
+# for docker additional configs
+include features/docker/docker.scc
+#include cfg/enable-legacy-ip-tables.scc
+#include cfg/docker-overlayfs.scc
+#include cfg/kubernetes.scc

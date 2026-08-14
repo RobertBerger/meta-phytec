@@ -1,22 +1,68 @@
-KCONFIG_MODE:phytec-machine = "alldefconfig"
+inherit kernel-deploy-oftree
 
-COMPATIBLE_MACHINE:phyboard-segin-imx6ul-6 = "phyboard-segin-imx6ul-6"
-KBUILD_DEFCONFIG:phyboard-segin-imx6ul-6 = "imx_v6_v7_defconfig"
+FILESEXTRAPATHS:prepend := "${THISDIR}/linux-yocto:"
+#SRC_URI:append = " \
+#  file://audit-disable.scc \
+#"
 
-# extend yocto-kernel and kernel-devicetree.bbclass
-# 1. generate the oftree symlink
-# 2. deploy the kernel config file
+#KERNEL_FEATURES += "audit-disable.scc"
+
+COMPATIBLE_MACHINE  = "^("
+COMPATIBLE_MACHINE .=  "phyboard-polis-imx8mm-5"
+COMPATIBLE_MACHINE .= "|phyboard-pollux-imx8mp-3"
+COMPATIBLE_MACHINE .= "|phygate-tauri-l-imx8mm-2"
+COMPATIBLE_MACHINE .= "|imx8mp-libra-fpsc-1"
+COMPATIBLE_MACHINE .= "|phyboard-segin-imx93-2"
+COMPATIBLE_MACHINE .= "|phyboard-nash-imx93-1"
+COMPATIBLE_MACHINE .= ")$"
+
+ARCH = "arm64"
+
+KBUILD_DEFCONFIG = "defconfig"
+KCONFIG_MODE = "alldefconfig"
+
+KCONF_BSP_AUDIT_LEVEL = "2"
+KCONF_AUDIT_LEVEL = "2"
+
+SRC_URI += "file://phyboard-pollux-imx8mp-3-kmeta;type=kmeta;destsuffix=phyboard-pollux-imx8mp-3-kmeta"
+
+KMACHINE:phyboard-pollux-imx8mp-3 = "phyboard-pollux-imx8mp-3"
+
+require linux-yocto-docker.inc
+
+#LINUX_VERSION_EXTENSION:append:meson-gx = "-meson64"
+
+# Add HDMI output support if display output is required
+#KERNEL_FEATURES:append = "${@bb.utils.contains_any('DISTRO_FEATURES', 'x11 wayland', \
+#    ' cfg/meson-hdmi.scc', '', d)}"
+
+#KERNEL_FEATURES:append = "${@bb.utils.contains('DISTRO_FEATURES', 'pci', \
+#    ' cfg/meson-pci.scc', '', d)}"
+
+#KERNEL_IMAGETYPES += "Image.zst"
+
+KERNEL_IMAGETYPES += "Image.lzma"
+
+# KERNEL_IMAGETYPES += "Image.gz Image.bz2 Image.lz4 Image.lzma Image.lzo Image.zst Image.xz"
+DEPENDS = "lzop-native"
 #
-def get_oftree(d):
-    kdt = d.getVar('KERNEL_DEVICETREE', '')
-    return os.path.basename(kdt.split()[0])
+# Image.xz: not supported by u-boot
+# 12M Jan  3 18:08 Image.xz--6.17.6+git0+b4e4cfd96a_19af2117bc-r0-phyboard-pollux-imx8mp-3-20260103180414.bin
+# 13M Jan  3 18:08 Image.lzma--6.17.6+git0+b4e4cfd96a_19af2117bc-r0-phyboard-pollux-imx8mp-3-20260103180414.bin
+# 15M Jan  3 18:08 Image.zst--6.17.6+git0+b4e4cfd96a_19af2117bc-r0-phyboard-pollux-imx8mp-3-20260103180414.bin
+# 17M Jan  3 18:08 Image.bz2--6.17.6+git0+b4e4cfd96a_19af2117bc-r0-phyboard-pollux-imx8mp-3-20260103180414.bin
+# 18M Jan  3 18:08 Image.gz--6.17.6+git0+b4e4cfd96a_19af2117bc-r0-phyboard-pollux-imx8mp-3-20260103180414.bin
+# 20M Jan  3 18:08 Image.lzo--6.17.6+git0+b4e4cfd96a_19af2117bc-r0-phyboard-pollux-imx8mp-3-20260103180414.bin
+# 22M Jan  3 18:08 Image.lz4--6.17.6+git0+b4e4cfd96a_19af2117bc-r0-phyboard-pollux-imx8mp-3-20260103180414.bin
 
-FIRST_DTS = "${@get_oftree(d)}"
-do_deploy:append:phytec-machine() {
-    install -m 644 ${B}/.config ${DEPLOYDIR}/$baseName.config
-    ln -sf $baseName.config ${DEPLOYDIR}/${KERNEL_IMAGETYPE}.config
-    dtdtb=`normalize_dtb "$FIRST_DTS"`
-    dtb_ext=${dtb##*.}
-    dtb_base_name=`basename $dtb .$dtb_ext`
-    ln -sf ${dtb_base_name}.${dtb_ext}  ${DEPLOYDIR}/oftree
-}
+# U-Boot:
+# -*- Enable LZ4 decompression support
+# -*- Enable LZMA decompression support
+# -*- Enable LZO decompression support
+# -*- Enable gzip decompression support
+# [ ] Enables zlib's uncompress() functionality (NEW)
+# -*- Enable bzip2 decompression support
+# [ ] Enable Zstandard decompression support
+# [*] Enable LZMA decompression support for VPL build (NEW)
+# [ ] Enable gzip decompression support for SPL build (NEW)
+# [ ] Enable gzip decompression support for SPL build (NEW)
