@@ -52,8 +52,12 @@ EMMC_DEV:mx8mp-generic-bsp ?= "2"
 IMAGE_CLASSES += "image-types-partup"
 require partup-layout-config.inc
 
+# kernel
+KERNEL_ALT_IMAGETYPE =+ " vmlinux "
+
 # Default images to build
-IMAGE_FSTYPES = "tar.gz wic.xz wic.bmap partup"
+#IMAGE_FSTYPES = "tar.gz wic.xz wic.bmap partup"
+IMAGE_FSTYPES = "tar.bz2 wic.xz wic.bmap"
 IMAGE_FSTYPES:update = "partup"
 
 MACHINE_FEATURES:use-nxp-bsp += "caam optee"
