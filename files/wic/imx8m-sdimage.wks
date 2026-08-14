@@ -7,4 +7,19 @@ part U-BOOT --source rawcopy --sourceparams="file=imx-boot" --ondisk mmc --no-ta
 part /boot --source bootimg_partition --fstype=vfat --label boot --ondisk mmc --use-uuid --active --align 4096 --size ${WKS_BOOTIMAGESIZE}
 part / --source rootfs --fstype=ext4 --label root --ondisk mmc --align 1024 --use-uuid
 
+# --size: The minimum partition size in MBytes. Specify an integer value such as 500.
+#         Do not append the number with “MB”. You do not need this option if you use --source.
+#part /var/lib/docker --ondisk mmcblk1 --fstype=btrfs --label data --align 4096 --size 2048
+# CONTAINER_ON_PERSISTENT = "1"
+# CONTAINER_ON_PERSISTENT_FSTYPE = "btrfs"
+# DEVICE_FOR_CONTAINER = "/dev/mmcblk0p3"
+# MOUNT_FOR_CONTAINER = "/var/lib/docker"
+# CONTAINER_WIC_ONDISK = "mmcblk0"
+# part [mountpoint] Specifying a mntpoint causes the partition to automatically be mounted:
+# part ${MOUNT_FOR_CONTAINER} --ondisk ${CONTAINER_WIC_ONDISK} --fstype=${CONTAINER_ON_PERSISTENT_FSTYPE} --label data --align 4096 --size 2048
+# If you do not provide mntpoint, Wic creates a partition but does not mount it:
+#part container --ondisk mmc --fstype=ext4 --label cntdata --align 4096 --size 2048
+part container --ondisk mmc --fstype=ext4 --label cntdata --align 4096 --size 20G
+#part container --ondisk ${CONTAINER_WIC_ONDISK} --fstype=${CONTAINER_ON_PERSISTENT_FSTYPE} --label cntdata --align 4096 --size 2048
+
 bootloader --timeout=0
