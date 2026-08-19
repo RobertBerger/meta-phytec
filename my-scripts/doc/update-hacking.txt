@@ -1,0 +1,72 @@
+on the build machine:
+
+backup meta-phytec (tarball)
+
+cd meta-phytec
+
+git co master
+git remote add official-upstream https://github.com/phytec/meta-phytec
+git fetch official-upstream
+
+# here are my modifications to a previous version
+git checkout 2026-08-11-training
+
+# new branch
+git checkout -b 2026-08-11-training-merged
+git diff 2026-08-11-training
+# they should be identical and we should be on the 2026-08-11-training-merged branch
+
+# rebase
+git rebase official-upstream/master
+
+Auto-merging conf/machine/include/phyimx8.inc
+CONFLICT (content): Merge conflict in conf/machine/include/phyimx8.inc
+error: could not apply f863b5f2... KERNEL_ALT_IMAGETYPE, IMAGE_FSTYPES
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply f863b5f2... KERNEL_ALT_IMAGETYPE, IMAGE_FSTYPES
+
+
+vim conf/machine/include/phyimx8.inc
+
+<<<<<<< HEAD
+IMAGE_FSTYPES = " \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'rauc', '', 'tar.gz wic.xz wic.bmap', d)} \
+    partup \
+"
+=======
+#IMAGE_FSTYPES = "tar.gz wic.xz wic.bmap partup"
+IMAGE_FSTYPES = "tar.bz2 wic.xz wic.bmap"
+IMAGE_FSTYPES:update = "partup"
+>>>>>>> f863b5f2 (KERNEL_ALT_IMAGETYPE, IMAGE_FSTYPES)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Successfully rebased and updated refs/heads/2026-08-11-training-merged.
+
+bitbake core-image-minimal
+
+ERROR: No recipes in default available for:
+  /workdir/build/yocto-ampliphy-master-2026-08-11-01-pinned/bitbake-builds/yocto-ampliphy-pinned/layers/meta-phytec/dynamic-layers/meta-arm/recipes-bsp/trusted-firmware-a/trusted-firmware-a_2.10%.bbappend
+
+So I guess we need to rebase meta-phytec
+
