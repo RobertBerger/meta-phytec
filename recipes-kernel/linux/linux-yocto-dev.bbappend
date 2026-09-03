@@ -1,23 +1,28 @@
+# !!! Note !!!
+# The default linux-yocto-dev uses:
+# SRCREV_meta (yocto-kernel-cache) AUTOREV with branch hardcoded to master
+# SRCREV_machine (linux-yocto-dev) AUTOREV with branch v7.2/standard/base
+# !!! We change this behavior !!!
+#
+# via this class:
+#   res-instead-of-yocto-git 
+# and this config for the class:
+#   RES_URI_AND_BRANCH_MAP = " \
+#    git.yoctoproject.org/yocto-kernel-cache:master->git://github.com/RobertBerger/yocto-kernel-cache|${KMETA_BRANCH} \
+#    git.yoctoproject.org/yocto-kernel-cache->git://github.com/RobertBerger/yocto-kernel-cache \
+#
+# we use as the branch for the yocto-kernel-cache the ${KMETA_BRANCH} instead of master
+#
+# and by using the configuration fragment preferred-provider-linux-yocto-dev-pinned.conf
+# we pin the commit ids for both branches
+
 inherit kernel-deploy-oftree
+require linux-yocto-patch-queue-hack.inc
+require linux-yocto-and-yocto-dev-common.inc
 
-FILESEXTRAPATHS:prepend := "${THISDIR}/linux-yocto-dev:"
-SRC_URI:append = " \
-  file://audit-disable.scc \
-"
-
-KERNEL_FEATURES += "audit-disable.scc"
-
-COMPATIBLE_MACHINE  = "^("
-COMPATIBLE_MACHINE .=  "phyboard-polis-imx8mm-5"
-COMPATIBLE_MACHINE .= "|phyboard-pollux-imx8mp-3"
-COMPATIBLE_MACHINE .= "|phygate-tauri-l-imx8mm-2"
-COMPATIBLE_MACHINE .= "|imx8mp-phyflex-libra-rdk-2"
-COMPATIBLE_MACHINE .= "|phyboard-segin-imx91-1"
-COMPATIBLE_MACHINE .= "|phyboard-segin-imx93-2"
-COMPATIBLE_MACHINE .= "|phyboard-nash-imx93-1"
-COMPATIBLE_MACHINE .= ")$"
-
-ARCH = "arm64"
-
-KBUILD_DEFCONFIG = "defconfig"
-KCONFIG_MODE = "alldefconfig"
+# check this comment the code afterwards in linux-yocto-and-yocto-dev-common.inc
+# for the KERNEL_PATCH_IDEMPOTENCY_TOKEN:
+#
+# -------------------------------------------------------------------------------
+# DYNAMIC IDEMPOTENCY TOKEN MAPPING (BASED ON YOCTO KERNEL BRANCHES)
+# -------------------------------------------------------------------------------

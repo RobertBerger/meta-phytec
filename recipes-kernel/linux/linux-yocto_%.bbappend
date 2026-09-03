@@ -1,22 +1,10 @@
-KCONFIG_MODE:phytec-machine = "alldefconfig"
+inherit kernel-deploy-oftree
+require linux-yocto-patch-queue-hack.inc
+require linux-yocto-and-yocto-dev-common.inc
 
-COMPATIBLE_MACHINE:phyboard-segin-imx6ul-6 = "phyboard-segin-imx6ul-6"
-KBUILD_DEFCONFIG:phyboard-segin-imx6ul-6 = "imx_v6_v7_defconfig"
-
-# extend yocto-kernel and kernel-devicetree.bbclass
-# 1. generate the oftree symlink
-# 2. deploy the kernel config file
+# check this comment the code afterwards in linux-yocto-and-yocto-dev-common.inc
+# for the KERNEL_PATCH_IDEMPOTENCY_TOKEN:
 #
-def get_oftree(d):
-    kdt = d.getVar('KERNEL_DEVICETREE', '')
-    return os.path.basename(kdt.split()[0])
-
-FIRST_DTS = "${@get_oftree(d)}"
-do_deploy:append:phytec-machine() {
-    install -m 644 ${B}/.config ${DEPLOYDIR}/$baseName.config
-    ln -sf $baseName.config ${DEPLOYDIR}/${KERNEL_IMAGETYPE}.config
-    dtdtb=`normalize_dtb "$FIRST_DTS"`
-    dtb_ext=${dtb##*.}
-    dtb_base_name=`basename $dtb .$dtb_ext`
-    ln -sf ${dtb_base_name}.${dtb_ext}  ${DEPLOYDIR}/oftree
-}
+# -------------------------------------------------------------------------------
+# DYNAMIC IDEMPOTENCY TOKEN MAPPING (BASED ON YOCTO KERNEL BRANCHES)
+# -------------------------------------------------------------------------------
