@@ -6,7 +6,7 @@
 # IN-PLACE REPLACEMENT: Swap the base server URI without wiping out other layers
 #SRC_URI := "${@d.getVar('SRC_URI').replace('git://git.yoctoproject.org', 'git://github.com/RobertBerger')}"
 
-inherit kernel-deploy-oftree res-instead-of-yocto-git
+inherit kernel-deploy-oftree res-instead-of-yocto-git shallow-recovery
 
 COMPATIBLE_MACHINE  = "^("
 COMPATIBLE_MACHINE .=  "phyboard-polis-imx8mm-5"
