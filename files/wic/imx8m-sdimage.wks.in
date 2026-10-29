@@ -1,0 +1,115 @@
+# short-description: Create a Phytec i.MX8M disk image (SD card)
+# long-description: Creates a partitioned disk image for Phytec i.MX8M BSPs
+# boards that the user can directly dd to an SD card and boot.
+
+#bootloader --ptable gpt
+#part U-BOOT --source rawcopy --sourceparams="file=imx-boot" --ondisk mmc --no-table --offset ${BOOTLOADER_SEEK}
+
+#part /boot --source bootimg_partition --fstype=vfat --label boot --ondisk mmc --use-uuid --active --align 4096 --size ${WKS_BOOTIMAGESIZE}
+#part / --source rootfs --fstype=ext4 --label root --ondisk mmc --align 1024 --use-uuid
+
+# --size: The minimum partition size in MBytes. Specify an integer value such as 500.
+#         Do not append the number with “MB”. You do not need this option if you use --source.
+#part /var/lib/docker --ondisk mmcblk1 --fstype=btrfs --label data --align 4096 --size 2048
+# CONTAINER_ON_PERSISTENT = "1"
+# CONTAINER_ON_PERSISTENT_FSTYPE = "btrfs"
+# DEVICE_FOR_CONTAINER = "/dev/mmcblk0p3"
+# MOUNT_FOR_CONTAINER = "/var/lib/docker"
+# CONTAINER_WIC_ONDISK = "mmcblk0"
+# part [mountpoint] Specifying a mntpoint causes the partition to automatically be mounted:
+# part ${MOUNT_FOR_CONTAINER} --ondisk ${CONTAINER_WIC_ONDISK} --fstype=${CONTAINER_ON_PERSISTENT_FSTYPE} --label data --align 4096 --size 2048
+# If you do not provide mntpoint, Wic creates a partition but does not mount it:
+# part container --ondisk mmc --fstype=ext4 --label cntdata --align 4096 --size 2048
+# part container --ondisk mmc --fstype=ext4 --label cntdata --align 4096 --size 20G
+#part container --ondisk ${CONTAINER_WIC_ONDISK} --fstype=${CONTAINER_ON_PERSISTENT_FSTYPE} --label cntdata --align 4096 --size 2048
+# Represent 20 Gigabytes accurately in Megabytes (20 * 1024)
+# part container --ondisk mmc --fstype=ext4 --label cntdata --align 4096 --size 20480
+
+# bootloader --timeout=0
+
+
+
+
+# short-description: Unified Phytec i.MX8M disk image (SD card)
+# long-description: Creates a single partition blueprint compatible with both
+# core-image-minimal and core-image-base targets.
+
+# Use GPT table - works for both images as long as we fix the output name extension
+#bootloader --ptable gpt --timeout=0
+
+# Partition 0: Raw bootloader placement space (No table mapping)
+#part U-BOOT --source rawcopy --sourceparams="file=imx-boot" --ondisk mmc --no-table --offset ${BOOTLOADER_SEEK}
+
+# Partition 1: VFAT Boot partition - Hardcoded to 64MB (plenty for fitImage)
+#part /boot --source bootimg_partition --fstype=vfat --label boot --ondisk mmc --use-uuid --active --align 4096 --size ${WKS_BOOTIMAGESIZE}
+
+# Partition 2: Main Linux rootfs filesystem partition (auto-expands to fit the data)
+#part / --source rootfs --fstype=ext4 --label root --ondisk mmc --align 1024 --use-uuid
+
+# Partition 3: Persistent Data Container Partition - Fixed size using raw integer Megabytes (20 * 1024)
+# part container --ondisk mmc --fstype=ext4 --label cntdata --align 4096 --size 20480
+
+# ------------------------
+
+# short-description: Unified Phytec i.MX8M disk image (SD card)
+# long-description: Creates a single partition blueprint compatible with both
+# core-image-minimal and core-image-base targets by utilizing an MBR extended layout.
+
+# Use msdos - ensures core-image-minimal compiles without missing sysroot tool errors
+#bootloader --ptable msdos --timeout=0
+
+# Partition 0: Raw bootloader placement space (No table mapping) at offset 32
+#part U-BOOT --source rawcopy --sourceparams="file=imx-boot" --ondisk mmc --no-table --offset ${BOOTLOADER_SEEK}
+
+# Primary Partition 1: VFAT Boot partition mapped to your exact expanded size
+#part /boot --source bootimg_partition --fstype=vfat --label boot --ondisk mmc --use-uuid --active --align 4096 --size ${WKS_BOOTIMAGESIZE}
+
+# Primary Partition 2: Main Linux rootfs filesystem partition
+#part / --source rootfs --fstype=ext4 --label root --ondisk mmc --align 1024 --use-uuid
+
+# Logical Partition 5 (via Primary 3 Extended): Persistent Data Container Partition
+# Because it is under msdos, WIC will automatically generate an extended container slot
+# to hold this massive 20GB block cleanly!
+#part container --ondisk mmc --fstype=ext4 --label cntdata --align 4096 --size 20480
+
+
+# ----------------------------------------------------
+
+# short-description: Unified Phytec i.MX8M disk image
+bootloader --ptable msdos --timeout=0
+
+# Partition 0: Bootloader offset space
+part U-BOOT --source rawcopy --sourceparams="file=imx-boot" --ondisk mmcblk --no-table --offset ${BOOTLOADER_SEEK}
+
+# Primary 1: VFAT Boot
+part /boot --source bootimg_partition --fstype=vfat --label boot --ondisk mmcblk --use-uuid --active --align 4096 --size ${WKS_BOOTIMAGESIZE}
+
+# Primary 2: RootFS
+part / --source rootfs --fstype=ext4 --label root --ondisk mmcblk --align 1024 --use-uuid
+
+# Logical 5: Data Container
+part container --ondisk mmcblk --fstype=ext4 --label cntdata --align 4096 --size 20480
+
+#-------------------------------------------------
+
+# short-description: Create a Phytec i.MX8M disk image from partup layout
+# long-description: Creates a partitioned disk image for Phytec i.MX8M BSPs
+# boards that the user can directly dd to an SD card and boot.
+
+# Bootloader layout config (msdos style layout from partup.yaml)
+#bootloader --ptable msdos --timeout=0
+
+# --- RAW / BOOTLOADER SECTION ---
+# Writes the raw bootloader image at the exact seek offset without adding a partition entry
+#part U-BOOT --source rawcopy --sourceparams="file=${BOOTLOADER_FILE}" --ondisk mmc --no-table --offset ${BOOTLOADER_SEEK}
+
+# --- PARTITIONS SECTION ---
+
+# 1. Boot Partition (FAT32, 128MiB fixed size)
+# In Yocto, individual boot files are managed via the IMAGE_BOOT_FILES variable in your machine configs.
+#part /boot --source bootimg-partition --fstype=vfat --label boot --ondisk mmc --use-uuid --active --offset ${BOOT_PART_OFFSET} --fixed-size 128M
+#part /boot --source bootimg_partition --fstype=vfat --label boot --ondisk mmc --use-uuid --active --align ${BOOT_PART_OFFSET} --size ${WKS_BOOTIMAGESIZE}
+
+# 2. Root Filesystem Partition (ext4, expands to fill remaining space)
+# Uses the pre-built ext4 raw image file requested by your partup configuration.
+#part / --source rawcopy --sourceparams="file=${IMAGE_LINK_NAME}.ext4" --fstype=ext4 --label root --ondisk mmc --use-uuid --align 4096 --expand
