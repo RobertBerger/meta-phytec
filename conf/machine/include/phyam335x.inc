@@ -13,15 +13,45 @@ MACHINE_SOCARCH = "${TUNE_PKGARCH}-ti33x"
 PACKAGE_EXTRA_ARCHS:append = " ${MACHINE_SOCARCH}"
 
 # Bootloader
-PREFERRED_PROVIDER_virtual/bootloader ?= "barebox"
-PREFERRED_PROVIDER_virtual/prebootloader ?= "barebox-ipl"
-BAREBOX_IPL_IMAGE_NAME = "MLO-${MACHINE}-${PKGV}-${PKGR}${IMAGE_VERSION_SUFFIX}"
-BAREBOX_IPL_BIN_LINK_NAME = "MLO"
+#PREFERRED_PROVIDER_virtual/bootloader ?= "barebox"
+#PREFERRED_PROVIDER_virtual/prebootloader ?= "barebox-ipl"
+#BAREBOX_IPL_IMAGE_NAME = "MLO-${MACHINE}-${PKGV}-${PKGR}${IMAGE_VERSION_SUFFIX}"
+#BAREBOX_IPL_BIN_LINK_NAME = "MLO"
+
+UBOOT_IMAGE_NAME = "u-boot-${MACHINE}-${PKGV}-${PKGR}${IMAGE_VERSION_SUFFIX}"
+UBOOT_BINARY = "u-boot.img"
+SPL_BINARY = "MLO"
 
 # Kernel 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-phytec"
 PREFERRED_PROVIDER_amx3-cm3 ?= "amx3-cm3-phy"
 KERNEL_IMAGETYPE ?= "zImage"
+KERNEL_IMAGETYPES ?= "zImage Image"
+
+#EERNEL_IMAGETYPE = "fitImage"
+#KERNEL_IMAGETYPES = "fitImage"
+
+#KERNEL_IMAGETYPE = "zImage"
+#KERNEL_IMAGETYPES = "Image zImage"
+
+# --> fitimage 
+
+# Der Kernel baut das unkomprimierte Image
+#KERNEL_IMAGETYPE = "Image"
+#KERNEL_IMAGETYPES = "Image zImage"
+
+# Aktiviert die vom neuen FIT-Image-Rezept benötigten Zusatzdateien (wie linux.bin)
+KERNEL_CLASSES += "kernel-fit-extra-artifacts"
+
+# Verhindert, dass das nackte Kernel-Paket standardmäßig installiert wird (da du das FIT-Image nutzt)
+RRECOMMENDS:${KERNEL_PACKAGE_NAME}-base = ""
+
+# Setzt das FIT-Image als Abhängigkeit für den Rootfs-Bau
+MACHINE_ESSENTIAL_EXTRA_RDEPENDS += "linux-yocto-fitimage"
+KERNEL_DEPLOY_DEPEND = "linux-yocto-fitimage:do_deploy"
+
+# <-- fitImage
+
 # Install modules in initramfs and rootfs
 MACHINE_EXTRA_RRECOMMENDS += "kernel-modules"
 KERNEL_MODULE_AUTOLOAD += " cryptodev"
@@ -64,10 +94,63 @@ QT_QPA_DEFAULT_PLATFORM ?= "${@bb.utils.contains('MACHINE_FEATURES', 'gpu', 'egl
 IMAGE_CLASSES += "wic-helper"
 IMAGE_CLASSES += "wic-am335x-helper"
 EXTERNAL_KERNEL_DEVICETREE ??= ""
-IMAGE_BOOT_FILES = "barebox.bin MLO ${KERNEL_IMAGETYPE} oftree ${EXTERNAL_KERNEL_DEVICETREE}"
-do_image_wic[depends] += "\
-    virtual/prebootloader:do_deploy \
-"
+
+# --> fitimage stuff
+
+#IMAGE_BOOT_FILES = "barebox.bin MLO ${KERNEL_IMAGETYPE} oftree ${EXTERNAL_KERNEL_DEVICETREE}"
+#IMAGE_BOOT_FILES = "u-boot.img MLO ${KERNEL_IMAGETYPE} oftree ${EXTERNAL_KERNEL_DEVICETREE} uEnv.txt"
+#IMAGE_BOOT_FILES = "u-boot.img MLO ${KERNEL_IMAGETYPE} oftree ${EXTERNAL_KERNEL_DEVICETREE} uEnv.txt fitImage"
+
+# 1. Enable the automated extlinux configuration generation
+#UBOOT_EXTLINUX = "1"
+#UBOOT_EXTLINUX_LABELS = "default"
+
+# 2. Define the configuration file contents
+#UBOOT_EXTLINUX_KERNEL:default = "../fitImage"
+#UBOOT_EXTLINUX_MENU_DESCRIPTION:default = "FIT-Local"
+#UBOOT_EXTLINUX_BOOTARGS:default = "console=ttyS0,115200n8 earlycon root=/dev/mmcblk0p2 rootwait rw"
+
+# 3. Ensure the generated file gets added to your boot partition image
+#IMAGE_BOOT_FILES:append = " extlinux.conf;extlinux/extlinux.conf"
+
+# Set the primary kernel target to FIT
+#KERNEL_IMAGETYPE = "fitImage"
+KERNEL_IMAGETYPE = "zImage"
+# Deploy files to the FAT partition
+#IMAGE_BOOT_FILES = "u-boot.img MLO ${KERNEL_IMAGETYPE} oftree ${EXTERNAL_KERNEL_DEVICETREE} uEnv.txt"
+#IMAGE_BOOT_FILES = "u-boot.img MLO fitImage oftree ${EXTERNAL_KERNEL_DEVICETREE} uEnv.txt"
+IMAGE_BOOT_FILES = "u-boot.img MLO fitImage uEnv.txt"
+
+# 1. Enable the automated extlinux configuration generation
+UBOOT_EXTLINUX = "1"
+UBOOT_EXTLINUX_LABELS = "default"
+# cosmetic changes:
+UBOOT_EXTLINUX_FDT = ""
+UBOOT_EXTLINUX_FDTDIR = ""
+
+# 2. Define the configuration file contents (Added the missing mandatory variable)
+#UBOOT_EXTLINUX_ROOT = "/dev/mmcblk0p2"
+UBOOT_EXTLINUX_ROOT = "root=/dev/mmcblk0p2"
+UBOOT_EXTLINUX_KERNEL_IMAGE = "../fitImage"
+UBOOT_EXTLINUX_MENU_DESCRIPTION = "FIT-Local"
+#UBOOT_EXTLINUX_KERNEL_ARGS = "console=ttyS0,115200n8 earlycon root=/dev/mmcblk0p2 rootwait rw"
+#BOOT_EXTLINUX_BOOTARGS = "console=ttyS0,115200n8 earlycon root=/dev/mmcblk0p2 rootwait rw"
+#UBOOT_EXTLINUX_BOOTARGS = "rootwait rw console=ttyS0,115200n8 earlycon"
+#UBOOT_EXTLINUX_CONSOLE = "console=ttyS0,115200n8"
+UBOOT_EXTLINUX_BOOTARGS = "rootwait rw earlycon"
+UBOOT_EXTLINUX_CONSOLE = "console=ttyS0,115200n8"
+
+
+
+
+# 6. Instruct the WIC image builder to map the generated layout to your boot partition
+IMAGE_BOOT_FILES:append = " extlinux.conf;extlinux/extlinux.conf"
+
+# <-- fitimage stuff
+
+#do_image_wic[depends] += "\
+#    virtual/prebootloader:do_deploy \
+#"
 WKS_FILES:ti33x ?= "am335x-sdimage.wks"
 WKS_BOOTIMAGESIZE ?= "20"
 
@@ -78,3 +161,8 @@ NAND_DEV:ti33x ?= "0"
 # default images to build
 IMAGE_FSTYPES ?= "tar.gz wic wic.bmap ext4 \
     ${@bb.utils.contains('MACHINE_FEATURES', 'emmc', 'emmc', 'ubifs', d)}"
+
+# partup
+IMAGE_CLASSES += "image-types-partup"
+require partup-layout-config.inc
+
