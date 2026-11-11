@@ -17,6 +17,11 @@ COMPATIBLE_MACHINE .= "|phyboard-segin-imx93-2"
 COMPATIBLE_MACHINE .= "|phyboard-nash-imx93-1"
 COMPATIBLE_MACHINE .= ")$"
 
+#COMPATIBLE_MACHINE:beagleboneblack-1 = "beagleboneblack-1"
+#KBUILD_DEFCONFIG:beagleboneblack-1 = "multi_v7_defconfig"
+#ARCH:beagleboneblack-1 = "arm"
+#KARCH:beagleboneblack-1 = "arm"
+
 ARCH = "arm64"
 
 KBUILD_DEFCONFIG = "defconfig"
@@ -39,12 +44,16 @@ KBRANCH_DEFAULT = "${KBRANCH}"
 #SRCREV_machine ?= "${AUTOREV}"
 #SRCREV_meta ?= "${AUTOREV}"
 
+
+require ${TARGET_ARCH}-specifics.inc
+
 KMACHINE = "${MACHINE}"
 KTYPE = "${LINUX_KERNEL_TYPE}"
-KARCH = "arm64"
+#KARCH = "arm64"
 
-KERNEL_IMAGETYPES += "Image.lzma"
-DEPENDS = "lzop-native"
+#KERNEL_IMAGETYPES += "Image.lzma"
+#KERNEL_IMAGETYPES:append:aarch64 = " Image.lzma"
+#DEPENDS = "lzop-native"
 
 #
 # Image.xz: not supported by u-boot

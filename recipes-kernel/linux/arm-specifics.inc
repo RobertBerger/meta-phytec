@@ -1,0 +1,26 @@
+# arm32 specifics
+
+COMPATIBLE_MACHINE:beagleboneblack-1 = "beagleboneblack-1"
+KBUILD_DEFCONFIG:beagleboneblack-1 = "multi_v7_defconfig"
+ARCH:beagleboneblack-1 = "arm"
+KARCH:beagleboneblack-1 = "arm"
+
+# KCONFIG_MODE:phytec-machine = "alldefconfig"
+
+# extend yocto-kernel and kernel-devicetree.bbclass
+# 1. generate the oftree symlink
+# 2. deploy the kernel config file
+
+def get_oftree(d):
+    kdt = d.getVar('KERNEL_DEVICETREE', '')
+    return os.path.basename(kdt.split()[0])
+
+FIRST_DTS = "${@get_oftree(d)}"
+do_deploy:append:phytec-machine() {
+    install -m 644 ${B}/.config ${DEPLOYDIR}/$baseName.config
+    ln -sf $baseName.config ${DEPLOYDIR}/${KERNEL_IMAGETYPE}.config
+    dtdtb=`normalize_dtb "$FIRST_DTS"`
+    dtb_ext=${dtb##*.}
+    dtb_base_name=`basename $dtb .$dtb_ext`
+    ln -sf ${dtb_base_name}.${dtb_ext}  ${DEPLOYDIR}/oftree
+}
