@@ -35,8 +35,11 @@ PARTUP_PACKAGE_FILES:append:k3 = " ${@d.getVar('PREFERRED_PROVIDER_virtual/bootl
 
 PARTUP_LAYOUT_CONFIG ?= "layout-default.yaml"
 PARTUP_LAYOUT_CONFIG:k3 ?= "layout-default-k3.yaml"
+PARTUP_LAYOUT_CONFIG:ti33x ?= "layout-default-ti33x.yaml"
 PARTUP_LAYOUT_CONFIG:update ?= "layout-rauc.yaml"
 PARTUP_LAYOUT_CONFIG:update:k3 ?= "layout-rauc-k3.yaml"
+PARTUP_LAYOUT_CONFIG:update:ti33x ?= "layout-rauc-ti33x.yaml"
+
 
 PARTUP_SECTIONS += "clean partitions"
 PARTUP_SECTION_clean = "${@bb.utils.contains('PREFERRED_PROVIDER_virtual/bootloader', 'barebox', False, True, d)}"
@@ -50,6 +53,7 @@ BOOTLOADER_SKIP ??= "${@bb.utils.contains('PREFERRED_PROVIDER_virtual/bootloader
 BOOTLOADER_SEEK ??= "1"
 BOOTLOADER_FILE ??= "u-boot.bin"
 BOOTLOADER_FILE:k3 ?= ""
+BOOTLOADER_FILE:ti33x ?= ""
 BOOTLOADER_FILE:mx6-generic-bsp ?= "${BAREBOX_BINARY}"
 BOOTLOADER_FILE:mx6ul-generic-bsp ?= "${BAREBOX_BINARY}"
 BOOTLOADER_FILE:mx7-generic-bsp ?= "u-boot-with-spl.imx"

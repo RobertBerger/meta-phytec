@@ -1,0 +1,96 @@
+api-version: 1
+disklabel: msdos
+
+mmc:
+  boot-partitions:
+    enable: 0
+
+raw:
+  - input-offset: 0kiB
+    output-offset: 128kiB
+    input:
+      filename: MLO
+      sha256sum: ${@partup_sha256sum('MLO', d)}
+  - input-offset: 0kiB
+    output-offset: 256kiB
+    input:
+      filename: MLO
+      sha256sum: ${@partup_sha256sum('MLO', d)}
+  - input-offset: 0kiB
+    output-offset: 384kiB
+    input:
+      filename: u-boot.img
+      sha256sum: ${@partup_sha256sum('u-boot.img', d)}
+
+# BEGIN_CLEAN
+clean:
+  - offset: 3840kiB
+    size: 64kiB
+  - offset: 3968kiB
+    size: 64kiB
+# END_CLEAN
+
+partitions:
+  - label: boot0
+    type: primary
+    filesystem: fat32
+    flags:
+      - boot
+      - lba
+    size: 128MiB
+    offset: 4MiB
+    input: # ARRAY_IMAGE_BOOT_FILES
+      - filename: @KEY@ # ARRAY_IMAGE_BOOT_FILES
+
+  - label: boot1
+    type: primary
+    filesystem: fat32
+    flags:
+      - lba
+    size: 128MiB
+    input: # ARRAY_IMAGE_BOOT_FILES
+      - filename: @KEY@ # ARRAY_IMAGE_BOOT_FILES
+
+  - label: config
+    type: primary
+    filesystem: null
+    size: 64MiB
+    input:
+      - filename: config-partition.ext4
+
+  - label: root0
+    type: logical
+    filesystem: null
+    size: 8GiB
+    block-size: 4kiB
+    input:
+      - filename: ${IMAGE_LINK_NAME}.ext4
+
+  - label: root1
+    type: logical
+    filesystem: null
+    size: 8GiB
+    block-size: 4kiB
+    input:
+      - filename: ${IMAGE_LINK_NAME}.ext4
+
+  - label: etc-overlay
+    type: logical
+    filesystem: ext4
+    size: 512MiB
+
+  - label: genericoverlay
+    type: logical
+    filesystem: ext4
+    size: 2GiB
+
+  - label: persistent-data
+    type: logical
+    filesystem: ext4
+    size: 10GiB
+
+  - label: artifacts
+    type: logical
+    filesystem: ext4
+    expand: true
+
