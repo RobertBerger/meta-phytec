@@ -127,6 +127,31 @@ UBOOT_ENTRYPOINT = "0x82000000"
 WKS_FILES:ti33x ?= "am335x-sdimage.wks.in"
 WKS_BOOTIMAGESIZE ?= "20"
 
+
+# Bootloader slot configuration for TI AM335x (BeagleBone Black)
+# [slot.bootloader.0]
+# device=/dev/mmcblk@SD_DEV@
+# type=boot-raw-fallback
+# region-start=@SD_BOOT_REG_START@
+# region-size=@SD_BOOT_REG_SIZE@
+#
+# How this works on the TI AM335x (BeagleBone Black)
+#
+# • region-start=128K:
+#   The AM335x ROM bootloader scans raw offset 128 KB (0x20000, sector 256)
+#   for the primary SPL (MLO).
+# • region-size=256K:
+#   RAUC splits this 256 KB region into two equal 128 KB halves:
+#     • First Half (128 KB - 256 KB): Primary MLO
+#     • Second Half (256 KB - 384 KB): Fallback MLO (AM335x ROM backup offset)
+
+SD_BOOT_REG_START:ti33x ?= "128K"
+SD_BOOT_REG_SIZE:ti33x = "256K"
+
+# Raw bootloader (MLO at 128K/256K + u-boot.img at 384K) ends well before 4 MiB.
+# Starting Partition 1 (boot.0) at 4MiB (or 16MiB) guarantees zero overlap.
+BOOT_PART_OFFSET:ti33x = "4MiB"
+
 # Device information used by RAUC and some of its dependencies
 SD_DEV:ti33x ?= "0"
 EMMC_DEV:ti33x ?= "1"
