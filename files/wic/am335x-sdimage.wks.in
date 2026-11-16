@@ -5,7 +5,7 @@
 # Raw bootloaders matching layout-default-ti33x.yaml (128 KiB, 256 KiB backup, 384 KiB)
 part --source rawcopy --sourceparams="file=MLO" --ondisk mmc --no-table --align 128 --size 128k
 part --source rawcopy --sourceparams="file=MLO" --ondisk mmc --no-table --align 256 --size 128k
-part --source rawcopy --sourceparams="file=u-boot.img" --ondisk mmc --no-table --align 384 --size 3456k
+part --source rawcopy --sourceparams="file=u-boot.img" --ondisk mmc --no-table --align 384 --size 2048k
 
 # Boot and root partitions
 part --source bootimg_partition --fstype=vfat --label boot --mkfs-extraopts "-g 255/63 -a -s 8" --ondisk mmc --active --align 4096 --size ${WKS_BOOTIMAGESIZE}
@@ -19,5 +19,6 @@ part / --source rootfs --fstype=ext4 --label root --ondisk mmc --align 4096 --us
 
 # 2048 MiB (2 GiB) fixed size
 # part / --source rootfs --fstype=ext4 --label root --ondisk mmc --align 4096 --fixed-size 2048 --use-uuid
+
 
 bootloader --ptable msdos --timeout=0

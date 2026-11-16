@@ -24,10 +24,10 @@ raw:
 
 # BEGIN_CLEAN
 clean:
-  - offset: 3840kiB
-    size: 64kiB
-  - offset: 3968kiB
-    size: 64kiB
+  - offset: 2432kiB
+    size: 128kiB
+  - offset: 2560kiB
+    size: 128kiB
 # END_CLEAN
 
 partitions:
