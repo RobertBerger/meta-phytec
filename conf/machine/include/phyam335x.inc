@@ -105,6 +105,8 @@ EXTERNAL_KERNEL_DEVICETREE ??= ""
 #IMAGE_BOOT_FILES:append = " extlinux.conf;extlinux/extlinux.conf"
 # <-- fitimage stuff witch extlinux (not used here)
 
+IMAGE_BOOTLOADER = "MLO"
+
 # --> fitimage stuff without extlinux
 # Keep the standard raw kernel image type required by modern Yocto
 KERNEL_IMAGETYPE = "zImage"
@@ -145,12 +147,15 @@ WKS_BOOTIMAGESIZE ?= "20"
 #     • First Half (128 KB - 256 KB): Primary MLO
 #     • Second Half (256 KB - 384 KB): Fallback MLO (AM335x ROM backup offset)
 
-SD_BOOT_REG_START:ti33x ?= "128K"
-SD_BOOT_REG_SIZE:ti33x = "256K"
+SD_BOOT_REG_START:ti33x ?= "131072"
+SD_BOOT_REG_SIZE:ti33x = "262144"
 
 # Raw bootloader (MLO at 128K/256K + u-boot.img at 384K) ends well before 4 MiB.
 # Starting Partition 1 (boot.0) at 4MiB (or 16MiB) guarantees zero overlap.
 BOOT_PART_OFFSET:ti33x = "4MiB"
+
+# Do not skip leading bytes of MLO when packing the RAUC bundle
+BOOTLOADER_SEEK_EMMC:ti33x = "0"
 
 # Device information used by RAUC and some of its dependencies
 SD_DEV:ti33x ?= "0"
