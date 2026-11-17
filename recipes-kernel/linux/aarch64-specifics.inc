@@ -6,7 +6,7 @@ ARCH = "arm64"
 KARCH = "arm64"
 
 # can I remove this?
-# KBUILD_DEFCONFIG = "defconfig"
+KBUILD_DEFCONFIG = "defconfig"
 
 KERNEL_IMAGETYPES += "Image.lzma"
 #KERNEL_IMAGETYPES:append:aarch64 = " Image.lzma"
