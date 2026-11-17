@@ -16,11 +16,6 @@ raw:
     input:
       filename: MLO
       sha256sum: ${@partup_sha256sum('MLO', d)}
-  - input-offset: 0kiB
-    output-offset: 384kiB
-    input:
-      filename: u-boot.img
-      sha256sum: ${@partup_sha256sum('u-boot.img', d)}
 
 # BEGIN_CLEAN
 clean:
