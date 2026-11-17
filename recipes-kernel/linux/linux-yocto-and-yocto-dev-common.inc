@@ -24,7 +24,7 @@ COMPATIBLE_MACHINE .= ")$"
 
 ARCH = "arm64"
 
-KBUILD_DEFCONFIG = "defconfig"
+# KBUILD_DEFCONFIG = "defconfig"
 KCONFIG_MODE = "alldefconfig"
 
 KCONF_BSP_AUDIT_LEVEL = "2"

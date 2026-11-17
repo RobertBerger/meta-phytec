@@ -1,7 +1,8 @@
 # arm32 specifics
 
 COMPATIBLE_MACHINE:beagleboneblack-1 = "beagleboneblack-1"
-KBUILD_DEFCONFIG:beagleboneblack-1 = "multi_v7_defconfig"
+# attempt to use upstream config instead of this
+#KBUILD_DEFCONFIG:beagleboneblack-1 = "multi_v7_defconfig"
 ARCH:beagleboneblack-1 = "arm"
 KARCH:beagleboneblack-1 = "arm"
 
